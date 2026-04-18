@@ -1,8 +1,7 @@
-import asyncio
 import logging
 from fastapi import FastAPI
 import uvicorn
-from app.api.router import router
+from app.api.routers import router
 from app.core.config import settings
 from app.workers.price_worker import price_worker
 
