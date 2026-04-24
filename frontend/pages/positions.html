@@ -123,6 +123,8 @@ class="font-body text-sm divide-y divide-surface-container-highest/30">
 <script src="../assets/js/positions.js"></script>
 <script src="../assets/js/layout.js"></script>
 
+<script src="../assets/js/toast.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
     if (!localStorage.getItem("access_token")) {
@@ -147,4 +149,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 </script>
 </div>
+    <div id="toast-container"
+     class="fixed bottom-5 right-5 z-[9999] flex flex-col gap-3">
+</div>
+          <script src="../assets/js/toast.js"></script>
 </body></html>

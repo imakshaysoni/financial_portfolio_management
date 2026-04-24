@@ -1,3 +1,5 @@
+let IS_SEARCH_ACTIVE = false;
+let CURRENT_SECTOR = "all"; // all | Technology | Energy | etc
 async function initDashboard() {
     if (!localStorage.getItem("access_token")) {
         window.location.href = "/pages/auth.html";
@@ -98,7 +100,7 @@ async function loadDashboardPositions() {
         });
 
     } catch (err) {
-        console.error("Positions load failed:", err.message);
+        toast.error("Positions load failed:", err.message);
     }
 }
 
@@ -107,4 +109,186 @@ function formatCurrency(value) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+}
+
+let ALL_STOCKS = [];
+let currentIndex = 0;
+const PAGE_SIZE = 6;
+
+async function loadStocks() {
+  try {
+    const res = await api("/stocks");
+
+    ALL_STOCKS = res.data || res;
+    FILTERED_STOCKS = [...ALL_STOCKS];
+    currentIndex = 0;
+
+    renderNextStocks(true); // first load
+  } catch (err) {
+    toast.error("Failed to load stocks");
+  }
+}
+
+function renderNextStocks(reset = false) {
+  const container = document.getElementById("stocksGrid");
+
+  if (reset) {
+    container.innerHTML = "";
+
+      if (IS_SEARCH_ACTIVE && FILTERED_STOCKS.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center text-slate-400 py-10">
+            No stocks found
+          </div>
+        `;
+        document.getElementById("loadMoreBtn").style.display = "none";
+        return;
+      }
+  }
+
+  const source = (IS_SEARCH_ACTIVE || CURRENT_SECTOR !== "all")
+  ? FILTERED_STOCKS
+  : ALL_STOCKS;
+  const nextBatch = source.slice(currentIndex, currentIndex + PAGE_SIZE);
+
+  const html = nextBatch.map(stock => `
+    <article class="bg-surface-container-low rounded-xl p-6 flex flex-col gap-4 hover:bg-surface-container-high transition-colors duration-300 group cursor-pointer relative overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.06)] border-none">
+<!-- Decorative subtle gradient glow -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors"></div>
+<div class="flex justify-between items-start z-10">
+<div>
+<h2 class="font-headline text-xl font-semibold text-on-surface">${stock.symbol}</h2>
+<p class="font-body text-sm text-on-surface-variant mt-1">${stock.name || ""}</p>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-highest px-2 py-1 rounded text-xs font-label text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                        Live
+                    </div>
+</div>
+<div class="flex flex-col gap-2 z-10 mt-2">
+<div class="flex justify-between items-center border-b border-outline-variant/10 pb-2">
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Sector</span>
+<span class="font-body text-sm text-on-surface">${stock.sector}</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Industry</span>
+<span class="font-body text-sm text-on-surface">${stock.industry}</span>
+</div>
+</div>
+<div class="mt-4 z-10 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline text-lg font-bold text-on-surface">₹ ${stock.price}</span>
+<span class="font-body text-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_upward">arrow_upward</span>
+                            ${stock.change >= 0 ? "▲" : "▼"} ${stock.change || 0}%
+                        </span>
+</div>
+<button onclick="viewStock('${stock.symbol}')" class="px-4 py-2 bg-transparent text-primary hover:bg-primary/10 rounded-md font-label text-sm transition-colors border border-primary/20 group-hover:border-primary/50">View Details</button>
+</div>
+</article>
+  `).join("");
+
+  container.insertAdjacentHTML("beforeend", html);
+
+  currentIndex += PAGE_SIZE;
+
+  updateLoadMoreButton();
+}
+
+function viewStock(symbol) {
+  window.location.href = `/pages/stock_detail.html?symbol=${symbol}`;
+}
+
+function updateLoadMoreButton() {
+  const btn = document.getElementById("loadMoreBtn");
+  const source = IS_SEARCH_ACTIVE ? FILTERED_STOCKS : ALL_STOCKS;
+
+  if (currentIndex >= source.length) {
+    btn.style.display = "none";
+  } else {
+    btn.style.display = "block";
+  }
+}
+
+let FILTERED_STOCKS = [];
+
+function handleMarketSearch() {
+  CURRENT_SEARCH = document.getElementById("marketSearch").value.trim().toUpperCase();
+  IS_SEARCH_ACTIVE = !!CURRENT_SEARCH;
+
+  currentIndex = 0;
+
+  applyFilters();
+}
+
+function setSector(sector) {
+  CURRENT_SECTOR = sector;
+  currentIndex = 0;
+
+  updateActiveSectorUI(sector);
+  applyFilters();
+}
+
+function applyFilters() {
+  let data = [...ALL_STOCKS];
+
+  // 🔍 SEARCH
+  if (IS_SEARCH_ACTIVE) {
+    data = data.filter(stock =>
+      stock.symbol.toUpperCase().includes(CURRENT_SEARCH) ||
+      (stock.name || "").toUpperCase().includes(CURRENT_SEARCH)
+    );
+  }
+
+  // 🎯 SECTOR FILTER
+  if (CURRENT_SECTOR !== "all") {
+    data = data.filter(stock =>
+      (stock.sector || "").toLowerCase() === CURRENT_SECTOR.toLowerCase()
+    );
+  }
+
+  FILTERED_STOCKS = data;
+
+  renderNextStocks(true);
+}
+
+function updateActiveSectorUI(selected) {
+  document.querySelectorAll(".sector-btn").forEach(btn => {
+    btn.classList.remove("bg-primary/10", "text-primary");
+
+    if (btn.innerText.trim().toLowerCase() === selected.toLowerCase() ||
+        (selected === "all" && btn.innerText.includes("All"))) {
+      btn.classList.add("bg-primary/10", "text-primary");
+    }
+  });
+}
+
+function renderSectorFilters() {
+  const container = document.getElementById("sectorFilters");
+
+  const sectors = [...new Set(ALL_STOCKS.map(s => s.sector).filter(Boolean))];
+
+  container.innerHTML = `
+    <button onclick="setSector('all')" class="sector-btn">All</button>
+    ${sectors.map(sec => `
+      <button onclick="setSector('${sec}')" class="sector-btn">
+        ${sec}
+      </button>
+    `).join("")}
+  `;
+}
+
+function extractSectors() {
+  const sectorMap = {};
+
+  ALL_STOCKS.forEach(s => {
+    if (!s.sector) return;
+
+    sectorMap[s.sector] = (sectorMap[s.sector] || 0) + 1;
+  });
+
+  // sort by frequency (top sectors first)
+  ALL_SECTORS = Object.entries(sectorMap)
+    .sort((a, b) => b[1] - a[1])
+    .map(([sector]) => sector);
 }

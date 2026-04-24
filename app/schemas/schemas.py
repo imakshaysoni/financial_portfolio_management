@@ -74,6 +74,12 @@ class TransactionCreate(BaseModel):
     # def normalize_and_validate_symbol(cls, v: str) -> str:
     #     return validate_nse_symbol(v)
 
+class ChangePassword(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    current_password: str
+    new_password: str
+
 
 class TransactionOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -106,6 +112,9 @@ class PortfolioHoldingOut(BaseModel):
 
 class PriceOut(BaseModel):
     price: float | None
+
+class ChangePasswordOut(BaseModel):
+    message: str | None
 
 
 class PortfolioPeriodMetricsOut(BaseModel):

@@ -37,7 +37,6 @@
 <!-- Sidebar -->
   <div id="sidebar"></div>
 <div class="flex-1 flex flex-col lg:ml-72">
-
 <!-- Header -->
     <div id="header"></div>
 <!-- Main Content Canvas -->
@@ -202,11 +201,13 @@ class="w-full mt-4 bg-gradient-to-br from-secondary to-on-secondary-container te
 </div>
 </div>
 
+
     <script src="../assets/js/config.js"></script>
 <script src="../assets/js/api.js"></script>
 <script src="../assets/js/auth.js"></script>
 <script src="../assets/js/transactions.js"></script>
 <script src="../assets/js/layout.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     if (!localStorage.getItem("access_token")) {
@@ -215,9 +216,21 @@ document.addEventListener("DOMContentLoaded", () => {
     initLayout()
     loadStocks();
     loadTransactions();
+
+    document.querySelectorAll("form").forEach(form => {
+  form.addEventListener("submit", e => e.preventDefault());
 });
+});
+
+
 </script>
 
+
+
 </main>
+    <div id="toast-container"
+     class="fixed bottom-5 right-5 z-[9999] flex flex-col gap-3">
+</div>
+          <script src="../assets/js/toast.js"></script>
 </div>
 </body></html>

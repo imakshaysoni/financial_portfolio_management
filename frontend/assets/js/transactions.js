@@ -18,7 +18,7 @@ window.submitTransaction = async function () {
     const type = document.querySelector('input[name="tx_type"]:checked')?.value;
 
     if (!symbol || !quantity || !price) {
-        alert("Please fill all fields");
+        toast.info("Please fill all fields");
         return;
     }
 
@@ -31,20 +31,21 @@ window.submitTransaction = async function () {
         });
 
         if (res) {
-            alert("Transaction created successfully");
+            toast.success("Transaction created successfully");
         }
 
     } catch (err) {
         console.error(err);
-        alert(err);
+        toast.error(err);
 
     }
     document.getElementById("symbol").value = "";
     document.getElementById("quantity").value = "";
     document.getElementById("price").value = "";
 
-    // optional: reload page or refresh table
-    window.location.reload();
+setTimeout(() => {
+  window.location.reload();
+}, 1500); // 1.5 seconds delay
 };
 
 let ALL_TRANSACTIONS = [];
@@ -69,7 +70,7 @@ async function loadTransactions() {
 
     } catch (err) {
         console.error(err);
-        alert("Failed to load transactions");
+        toast.error("Failed to load transactions");
     }
 }
 
@@ -273,7 +274,7 @@ function formatDate(dateStr) {
         minute: "2-digit"
     });
 }
-
+//
 async function loadStocks() {
     try {
         const stocks = await api("/stocks");

@@ -3,7 +3,7 @@ from curl_cffi.requests.utils import quote_path_and_params
 from app.services.auth_services import AuthService
 from app.services.db_service import portfolio_db_service
 from fastapi import Depends
-from app.schemas.schemas import TransactionCreate, StockOut, TransactionOut
+from app.schemas.schemas import TransactionCreate, StockOut, TransactionOut, ChangePasswordOut, ChangePassword
 
 import logging
 logger = logging.getLogger(__name__)
@@ -68,4 +68,12 @@ class PortfolioEndpoints:
         service = portfolio_db_service()
         result = service.get_price(symbol)
         logger.info(result.price)
+        return result
+
+    @staticmethod
+    def change_password(request: ChangePassword, user = Depends(AuthService.get_current_user)):
+        service = portfolio_db_service()
+        result = service.change_password(user.id,  request.current_password, request.new_password)
+        if result:
+            return ChangePasswordOut(message="Password Change successfully.")
         return result

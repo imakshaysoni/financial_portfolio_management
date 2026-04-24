@@ -3,9 +3,10 @@ from statistics import quantiles
 
 from fastapi import HTTPException
 
+from app.services.auth_services import AuthService
 from app.core.database import SqlDatabase
 from app.core.config import settings
-from app.schemas.schemas import TransactionOut, Users, PriceOut
+from app.schemas.schemas import TransactionOut, Users, PriceOut, ChangePasswordOut
 from app.schemas.schemas import TransactionCreate, TransactionSide, \
     PortfolioHoldingOut, PositionOut
 
@@ -177,3 +178,19 @@ class portfolio_db_service(SqlDatabase):
             raise HTTPException(status_code=400, detail="Stock price details not found.")
         price_obj = PriceOut(price=output[0])
         return price_obj
+
+    def change_password(self, user_id, current_password, new_password):
+        auth_service = AuthService()
+        user_details = auth_service.db.get_user_by_id(user_id)
+        if not user_details:
+            raise HTTPException(status_code=400, detail="User details does not found.")
+        if user_details.id:
+            if auth_service._verify_password(current_password, user_details.password):
+                hashed_password = auth_service._hash_password(new_password)
+
+                query = "update users set password=? where id=?"
+                output = self.execute(query, (hashed_password, user_id))
+                return ChangePasswordOut(message="Password has been changed successfully.")
+            raise HTTPException(status_code=400, detail="Current password does not match, Try again.")
+        raise HTTPException(status_code=400, detail="User Id does not found.")
+

@@ -5,7 +5,10 @@
 <div class="flex items-center gap-4 mb-8">
 <img alt="Primary User Profile" class="w-12 h-12 rounded-full object-cover border border-white/10" data-alt="professional headshot of a person in studio lighting against a dark gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCID6HpBAJtAvRCjVWGAXnwU0NMDCZgLqfGTKoofXH3sZarIAvuL1j8ylXLmeXvMu3Cxp8pW-ldT21jaHr-TsJWZ-zQiFaVy9NUoN8_n-Z-IvVD4eS7W1T8HLoJnbRmVb1lUrjARkdSTkBVM3BsJg-MfxYk_l29jIZ8JpJoz1HDusNnFo8MLZuxW-cqgRLFIM2k-cJYYuzwqpc6wRbLLqlGrL0HD7RSec4gRfcF2_HRvSAlSECuIPhQ8sj1pO8H6oA-B3IwY9OoXoI"/>
 <div>
-<div class="text-[#b4c5ff] font-semibold">User</div>
+<a href="/pages/profile_summary.html"
+   class="text-[#b4c5ff] font-semibold cursor-pointer">
+  User
+</a>
 <div class="text-slate-500 text-xs mt-0.5">Verified Portfolio</div>
 </div>
 </div>
@@ -18,28 +21,39 @@
 <nav class="flex-1 mt-4">
 <ul class="flex flex-col gap-1">
 <li>
-<a class="bg-[#b4c5ff]/10 text-[#b4c5ff] border-r-2 border-[#b4c5ff] px-6 py-3 font-semibold transition-all duration-200 ease-in-out flex items-center gap-4" href="/pages/dashboard.html">
-<span class="material-symbols-outlined" data-icon="dashboard_customize">dashboard_customize</span>
-                        Dashboard
-                    </a>
+    <a href="/pages/dashboard.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined">dashboard_customize</span>
+   Dashboard
+</a>
 </li>
 <li>
-<a class="text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 transition-colors transition-all duration-200 ease-in-out flex items-center gap-4" href="/pages/portfolio_summar_chart.html">
-<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
-                        Transactions
-                    </a>
+<a href="/pages/execute_trade.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined">swap_horiz</span>
+   Transactions
+</a>
 </li>
 <li>
-<a class="text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 transition-colors transition-all duration-200 ease-in-out flex items-center gap-4" href="/pages/portfolio_summar_chart.html">
-<span class="material-symbols-outlined" data-icon="explore">explore</span>
-                        Market Explorer
-                    </a>
+    <a href="/pages/positions.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined">account_balance</span>
+   Holdings
+</a>
 </li>
     <li>
-<a class="text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 transition-colors transition-all duration-200 ease-in-out flex items-center gap-4" href="/pages/portfolio_summar_chart.html">
-<span class="material-symbols-outlined" data-icon="explore">explore</span>
-                        Market Explorer
-                    </a>
+         <a href="/pages/summary.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined">account_balance_wallet</span>
+   Portfolio
+</a>
+</li>
+   <li>
+        <a href="/pages/profile_summary.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined" data-icon="person">person</span>
+   Profile
+</a>
 </li>
 </ul>
 </nav>
@@ -47,16 +61,12 @@
 <div class="p-4 mt-auto">
 <ul class="flex flex-col gap-1">
 <li>
-<a class="text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 transition-colors transition-all duration-200 ease-in-out flex items-center gap-4" href="#">
-<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-                        Help Center
-                    </a>
-</li>
-<li>
-<a class="text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 transition-colors transition-all duration-200 ease-in-out flex items-center gap-4" href="javascript:void(0)" onclick="logout()">
-<span class="material-symbols-outlined" data-icon="logout">logout</span>
-                        Logout
-                    </a>
+    <a href="/pages/auth.html"
+   class="nav-item text-slate-500 px-6 py-3 hover:bg-slate-800/80 hover:text-slate-200 flex items-center gap-4">
+   <span class="material-symbols-outlined" data-icon="logout">logout</span>
+   Logout
+</a>
+
 </li>
 </ul>
 </div>

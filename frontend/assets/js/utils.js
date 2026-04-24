@@ -8,5 +8,5 @@ function formatPercent(value) {
 
 function showError(msg) {
     console.error(msg);
-    alert(msg);
+    toast.error(msg);
 }

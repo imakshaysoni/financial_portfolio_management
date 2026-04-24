@@ -60,7 +60,7 @@ async function loadPositions() {
         applyFilters();
 
     } catch (err) {
-        alert(err.message);
+        toast.error(err.message);
     }
 }
 

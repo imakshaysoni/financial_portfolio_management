@@ -12,11 +12,33 @@ async function initLayout() {
 }
 
 function setActiveNav() {
-  const path = window.location.pathname;
+  const currentPath = window.location.pathname;
 
   document.querySelectorAll(".nav-item").forEach(link => {
-    if (link.getAttribute("href") === path) {
-      link.classList.add("bg-slate-800", "text-white");
+    const href = link.getAttribute("href");
+
+    if (currentPath.includes(href)) {
+      link.classList.remove("text-slate-500");
+
+      link.classList.add(
+        "bg-[#b4c5ff]/10",
+        "text-[#b4c5ff]",
+        "border-r-2",
+        "border-[#b4c5ff]"
+      );
     }
   });
+}
+
+
+function goToTrade() {
+    window.location.href = "/pages/execute_trade.html";
+}
+
+function goToProfile() {
+    window.location.href = "/pages/profile_summary.html";
+}
+
+function goToChangePassword() {
+    window.location.href = "/pages/change_password.html";
 }

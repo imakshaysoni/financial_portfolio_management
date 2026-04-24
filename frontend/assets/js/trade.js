@@ -16,7 +16,7 @@ async function placeTrade(type) {
             type
         });
 
-        alert("Trade executed");
+        toast.success("Trade executed");
 
         // refresh related views
         if (typeof initPositions === "function") initPositions();
@@ -30,6 +30,9 @@ async function placeTrade(type) {
 
 function goToTrade() {
     window.location.href = "/pages/execute_trade.html";
+}
+function handleFormSubmit(e) {
+  e.preventDefault(); // 🔥 stops refresh
 }
 
 // 👇 expose globally

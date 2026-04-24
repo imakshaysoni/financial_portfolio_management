@@ -99,7 +99,7 @@
 <div>
 <h4 class="text-sm font-semibold text-on-surface mb-2">Access Credentials</h4>
 <p class="text-xs text-on-surface-variant mb-4">Last updated 45 days ago.</p>
-<button class="w-full bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-highest font-medium py-2 rounded-lg transition-colors text-sm">
+<button onclick="goToChangePassword()" class="w-full bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-highest font-medium py-2 rounded-lg transition-colors text-sm">
                                     Update Password
                                 </button>
 </div>
@@ -183,16 +183,25 @@
 <script src="../assets/js/auth.js"></script>
 <script src="../assets/js/layout.js"></script>
 
+<script src="../assets/js/toast.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     if (!localStorage.getItem("access_token")) {
         window.location.href = "/pages/auth.html";
     }
     initLayout()
+
+    setTimeout(setActiveNav, 100);
+
 });
 </script>
 
 </main>
 </div>
 </div>
+    <div id="toast-container"
+     class="fixed bottom-5 right-5 z-[9999] flex flex-col gap-3">
+</div>
+          <script src="../assets/js/toast.js"></script>
 </body></html>

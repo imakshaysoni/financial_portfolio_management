@@ -33,3 +33,18 @@ body {
     background: rgba(180,197,255,0.1);
     color: #b4c5ff;
 }
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}

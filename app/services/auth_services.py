@@ -93,14 +93,15 @@ class AuthService():
             token_in_db, is_revoked = self.db.get_token_from_db(jti)
 
             if not token_in_db or is_revoked:
-                return AuthServiceResponseModel(success=False, message="Token Revoked")
+                raise HTTPException(status_code=401, detail="Token Revoked")
 
             access_token =  self._create_access_token(data = {"sub": payload["sub"], "id": payload["id"],
                                 "jti": payload["jti"]})
+            logger.info("Refresh Token Generate new access token")
             return AuthServiceResponseModel(success=True, message="New access token created.",
                                             access_token=access_token)
         except Exception as err:
-            return AuthServiceResponseModel(success=False, message=f"{err}")
+            raise HTTPException(status_code=401, detail="Token Revoked")
 
     def login(self, user_name: str, password: str):
         try:
@@ -141,7 +142,7 @@ class AuthService():
             user_details = self.db.get_user_by_email(email_address)
 
             if user_details is None:
-                return AuthServiceResponseModel(success=False, message="User does not exist")
+                return AuthServiceResponseModel(success=False, message="Invalid email address")
 
             new_password = str(uuid.uuid4())
             hashed_new_password = self._hash_password(new_password)

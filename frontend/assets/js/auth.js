@@ -13,7 +13,7 @@ function initLogin() {
             localStorage.setItem("refresh_token", res.refresh_token);
             window.location.href = "/pages/summary.html";
         } else {
-            alert(res.message);
+            toast.error(res.message);
         }
     });
 }
@@ -42,10 +42,10 @@ function initResetPassword() {
                 // optional: hide form
                 form.classList.add("hidden");
             } else {
-                alert(res.message || "Failed to send reset link");
+                toast.error(res.message || "Failed to send reset link");
             }
         } catch (err) {
-            alert("Error sending reset link");
+            toast.error("Error sending reset link");
         }
     });
 }
@@ -68,16 +68,16 @@ function initSignup() {
             });
 
             if (res.success) {
-                alert("Account created successfully");
+                toast.success("Account created successfully");
 
                 // redirect to login
                 window.location.href = "/pages/auth.html";
             } else {
-                alert(res.message || "Signup failed");
+                toast.error(res.message || "Signup failed");
             }
 
         } catch (err) {
-            alert("Error creating account");
+            toast.error("Error creating account");
         }
     });
 }
