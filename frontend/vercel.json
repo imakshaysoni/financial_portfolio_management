@@ -1,0 +1,7 @@
+{
+  "routes": [
+    { "src": "^/$", "dest": "/pages/auth.html" },
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/pages/auth.html" }
+  ]
+}
