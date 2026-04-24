@@ -104,6 +104,9 @@ class PortfolioHoldingOut(BaseModel):
     unrealized_pnl: float
     unrealized_return_pct: float | None
 
+class PriceOut(BaseModel):
+    price: float | None
+
 
 class PortfolioPeriodMetricsOut(BaseModel):
     timeframe: Timeframe
@@ -134,7 +137,7 @@ class SignUpDetails(BaseModel):
     password: str
 
 class ResetPasswordDetails(BaseModel):
-    user_name: str
+    email_address: str
 
 
 class RefreshToken(BaseModel):

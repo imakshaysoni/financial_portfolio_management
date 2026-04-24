@@ -67,6 +67,17 @@ class SqlDatabase(Database):
         else:
             return None
 
+    def get_user_by_email(self, email_address: str):
+        query = """
+            select id, user_name, user_email, password from users where user_email=?
+        """
+        user_details = self.fetch_one(query, (email_address,))
+        logger.info(user_details)
+        if user_details:
+           return Users(id=user_details[0], user_name=user_details[1], email_address=user_details[2], password=user_details[3])
+        else:
+            return None
+
     def insert_user(self, user_name: str, password, email_address):
         print("Inside Insert User")
         query = """
@@ -76,13 +87,13 @@ class SqlDatabase(Database):
         user_id = self.execute(query, (user_name, email_address, password))
         return user_id
 
-    def reset_password(self, user_name: str, password: str):
+    def reset_password(self, email_address: str, password: str):
         # update new password in database
         query = """
-            update users set password=? where user_name=?
+            update users set password=? where user_email=?
         """
 
-        self.execute(query, (password,user_name))
+        self.execute(query, (password, email_address))
 
     def get_token_from_db(self, jti: str):
         query = """

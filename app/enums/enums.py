@@ -9,5 +9,5 @@ class AdminDetails(Enum):
 class AuthTokenConfig(Enum):
     SECRET_KEY = "default-token-key"  # use env in prod
     ALGORITHM = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES = 10
+    ACCESS_TOKEN_EXPIRE_MINUTES = 100
     REFRESH_TOKEN_EXPIRE_MINUTES = 100

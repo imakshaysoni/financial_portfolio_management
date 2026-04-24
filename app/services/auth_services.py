@@ -105,7 +105,7 @@ class AuthService():
     def login(self, user_name: str, password: str):
         try:
             user_details = self.db.get_user_by_name(user_name)
-            if user_details.id:
+            if user_details and user_details.id:
                 if self._verify_password(password, user_details.password):
                     jti = str(uuid.uuid4())  # Json Token Identifier (JTI)
                     access_token = self._create_access_token(
@@ -136,16 +136,16 @@ class AuthService():
             print(f"Err: {err}")
             return AuthServiceResponseModel(success=False, message=f"{str(err)}")
 
-    def reset_password(self, user_name):
+    def reset_password(self, email_address):
         try:
-            user_details = self.db.get_user_by_name(user_name)
+            user_details = self.db.get_user_by_email(email_address)
 
-            if user_details.id is None:
+            if user_details is None:
                 return AuthServiceResponseModel(success=False, message="User does not exist")
 
             new_password = str(uuid.uuid4())
             hashed_new_password = self._hash_password(new_password)
-            self.db.reset_password(user_name, hashed_new_password)
+            self.db.reset_password(email_address, hashed_new_password)
             mail = GmailMailSent(AdminDetails.USER_NAME.value, AdminDetails.EMAIL_ADDRESS.value)
             mail_data = MailHandlerRequest(message=f"Password reset, your new password is {new_password}, please login with this password.", receiver_email_address=user_details.email_address)
             mail.sent_mail(mail_data)

@@ -5,7 +5,7 @@ from fastapi import HTTPException
 
 from app.core.database import SqlDatabase
 from app.core.config import settings
-from app.schemas.schemas import TransactionOut, Users
+from app.schemas.schemas import TransactionOut, Users, PriceOut
 from app.schemas.schemas import TransactionCreate, TransactionSide, \
     PortfolioHoldingOut, PositionOut
 
@@ -16,6 +16,12 @@ class portfolio_db_service(SqlDatabase):
 
     def __init__(self):
         super().__init__(db_path=settings.sqlite_path)
+
+    def stock_exist(self, symbol):
+        query = "select symbol from stocks where symbol=?"
+        output = self.fetch_one(query, (symbol,))
+        logger.info(output)
+        return output
 
     def get_stocks_symbols(self):
         query = "select symbol from stocks"
@@ -37,6 +43,11 @@ class portfolio_db_service(SqlDatabase):
             type = txn.type.value
             status = "failed"
             created_at = datetime.now()
+            is_stock_exist = self.stock_exist(symbol)
+            if not is_stock_exist:
+                raise HTTPException(status_code=400, detail="Stocks does not exist")
+
+
             logger.info("Inserting trx to database")
             query = "insert into transactions (user_id, symbol, quantity, price, type, created_at) values (?, ?, ?, ?, ?, ?)" # default status
             trx_id = self.execute(query, (user_id, symbol, quantity, price, type, created_at))
@@ -89,11 +100,14 @@ class portfolio_db_service(SqlDatabase):
                 type = txn.type.value,
                 created_at = created_at
             )
-        except HTTPException as err:
-            logger.error(f"Transaction failed, Error: {err}")
-            raise HTTPException(status_code=400, detail="Insufficient holdings for this sale")
         except Exception as err:
-            raise HTTPException(status_code=400, detail=err)
+            logger.info(f"Test; {err}")
+            raise HTTPException(status_code=400, detail=str(err))
+        # except HTTPException as err:
+        #     logger.error(f"Transaction failed, Error: {err}")
+        #     raise HTTPException(status_code=400, detail=err)
+        # except Exception as err:
+        #     raise HTTPException(status_code=400, detail=err)
 
 
 
@@ -156,19 +170,10 @@ class portfolio_db_service(SqlDatabase):
         return positions
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def get_price(self, symbol: str):
+        query = "select price from price_history where symbol=? order by timestamp desc limit 1"
+        output = self.fetch_one(query, (symbol, ))
+        if output is None:
+            raise HTTPException(status_code=400, detail="Stock price details not found.")
+        price_obj = PriceOut(price=output[0])
+        return price_obj

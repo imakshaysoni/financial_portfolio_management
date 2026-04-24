@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transactions - Monolith</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- shared config -->
+<script src="../assets/shared/tailwind.js"></script>
+
+<!-- global css -->
+<link rel="stylesheet" href="../assets/css/global.css">
+<style>
+        /* Base styles from Design System */
+        body { background-color: #0b1326; color: #dae2fd; }
+        /* Tonal Layering Shadows */
+        .ambient-shadow { box-shadow: 0 40px 60px rgba(6, 14, 32, 0.5); }
+        /* Remove default scrollbars for clean UI */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased flex h-screen overflow-hidden">
+<!-- Shared Component: SideNavBar -->
+<!-- Sidebar -->
+  <div id="sidebar"></div>
+<div class="flex-1 flex flex-col lg:ml-72">
+
+<!-- Header -->
+    <div id="header"></div>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-72 bg-surface h-full overflow-y-auto">
+
+<div class="max-w-7xl mx-auto p-8 lg:p-12">
+<!-- Page Header -->
+<header class="mb-10 flex justify-between items-end">
+<div>
+<h2 class="font-headline text-3xl font-bold text-on-surface tracking-tight">Transactions</h2>
+<p class="font-body text-sm text-on-surface-variant mt-2">Manage and review your trading history</p>
+</div>
+</header>
+<!-- Tonal Architecture Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- Add New Transaction Form (Asymmetric smaller column) -->
+<div class="xl:col-span-4 flex flex-col gap-8">
+<section class="bg-surface-container-low rounded-xl p-8 relative overflow-hidden group">
+<!-- Subtle background gradient for depth -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+<h3 class="font-headline text-xl font-semibold text-on-surface mb-6 relative z-10">Add New Transaction</h3>
+<form class="space-y-5 relative z-10">
+<!-- Type Selector (Segmented Control) -->
+<div class="bg-surface-container-highest p-1 rounded-lg flex border border-outline-variant/10">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="tx_type" type="radio" value="buy"/>
+<div class="py-2.5 text-center rounded-md text-sm font-semibold transition-all peer-checked:bg-surface-container-low peer-checked:text-secondary peer-checked:shadow-sm text-on-surface-variant hover:text-on-surface">
+                                        Buy
+                                    </div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="tx_type" type="radio" value="sell"/>
+<div class="py-2.5 text-center rounded-md text-sm font-semibold transition-all peer-checked:bg-surface-container-low peer-checked:text-tertiary peer-checked:shadow-sm text-on-surface-variant hover:text-on-surface">
+                                        Sell
+                                    </div>
+</label>
+</div>
+<!-- Input: Symbol -->
+<div class="space-y-1.5">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant ml-1" for="symbol">Asset Symbol</label>
+<div class="relative">
+<select id="symbol"
+    onchange="handleSymbolChange()"
+    class="w-full bg-surface-container-highest border border-outline-variant/15
+           text-on-surface text-sm rounded-md px-4 py-3 focus:outline-none
+           focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+
+    <option value="">Select Symbol</option>
+</select>
+</div>
+</div>
+<!-- Input Row: Quantity & Price -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant ml-1" for="quantity">Quantity</label>
+<input class="w-full bg-surface-container-highest border border-outline-variant/15 text-on-surface text-sm rounded-md px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-on-surface-variant/50" id="quantity" placeholder="0.00" step="any" type="number"/>
+</div>
+<div class="space-y-1.5">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant ml-1" for="price">Price (INR)</label>
+<input class="w-full bg-surface-container-highest border border-outline-variant/15 text-on-surface text-sm rounded-md px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder-on-surface-variant/50" id="price" placeholder="0.00" readonly step="any" type="number"/>
+</div>
+</div>
+<!-- Submit Button -->
+<button type="button" onclick="submitTransaction()"
+class="w-full mt-4 bg-gradient-to-br from-secondary to-on-secondary-container text-on-secondary font-headline font-semibold py-3.5 rounded-lg shadow-[0_8px_20px_rgba(78,222,163,0.15)] hover:shadow-[0_12px_25px_rgba(78,222,163,0.25)] transition-all active:scale-[0.98]">
+    Execute Order
+</button>
+</form>
+</section>
+</div>
+<!-- Transaction History Table (Larger column) -->
+<div class="xl:col-span-8">
+<section class="bg-surface-container-low rounded-xl p-8 h-full flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline text-xl font-semibold text-on-surface">Transaction History</h3>
+<div class="flex gap-3 items-center">
+
+    <!-- 🔍 Search (keep same as before) -->
+    <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+        <input id="searchInput"
+            oninput="handleSearch()"
+            placeholder="Search symbol..."
+            class="pl-9 pr-3 py-2.5 rounded-md bg-surface-container-highest border border-outline-variant/20
+                   text-sm text-on-surface placeholder-on-surface-variant
+                   focus:ring-1 focus:ring-primary w-44">
+    </div>
+
+    <!-- 🎯 FILTER (Custom) -->
+    <div class="relative">
+        <button onclick="toggleDropdown('filterMenu')"
+            class="flex items-center gap-2 px-3 py-2.5 rounded-md
+                   bg-surface-container-highest border border-outline-variant/20
+                   text-sm hover:bg-surface-container-high transition">
+
+            <span class="material-symbols-outlined text-sm">tune</span>
+            <span id="filterLabel">All</span>
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+
+        <div id="filterMenu"
+            class="hidden absolute mt-2 w-36 bg-surface-container-high
+                   border border-outline-variant/20 rounded-lg shadow-lg z-50">
+
+            <div onclick="setFilter('all')" class="dropdown-item">All</div>
+            <div onclick="setFilter('buy')" class="dropdown-item">Buy</div>
+            <div onclick="setFilter('sell')" class="dropdown-item">Sell</div>
+        </div>
+    </div>
+
+    <!-- 🔃 SORT (Custom) -->
+    <div class="relative">
+        <button onclick="toggleDropdown('sortMenu')"
+            class="flex items-center gap-2 px-3 py-2.5 rounded-md
+                   bg-surface-container-highest border border-outline-variant/20
+                   text-sm hover:bg-surface-container-high transition">
+
+            <span class="material-symbols-outlined text-sm">swap_vert</span>
+            <span id="sortLabel">Date ↓</span>
+        </button>
+
+        <div id="sortMenu"
+    class="hidden absolute mt-2 w-44 bg-surface-container-high
+           border border-outline-variant/20 rounded-lg shadow-lg z-50">
+
+    <div onclick="setSortField('date')" class="dropdown-item">Date</div>
+    <div onclick="setSortField('price')" class="dropdown-item">Price</div>
+    <div onclick="setSortField('qty')" class="dropdown-item">Quantity</div>
+
+</div>
+    </div>
+
+</div>
+</div>
+<!-- Table Wrapper for scrolling -->
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 whitespace-nowrap">ID</th>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 whitespace-nowrap">Symbol</th>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 whitespace-nowrap">Type</th>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 text-right whitespace-nowrap">Quantity</th>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 text-right whitespace-nowrap">Price</th>
+<th class="font-label text-xs font-medium text-on-surface-variant uppercase tracking-[0.05em] pb-4 px-4 text-right whitespace-nowrap">Date</th>
+</tr>
+</thead>
+<tbody id="transactions_table_body" class="text-sm"></tbody>
+</tbody>
+</table>
+</div>
+<!-- Pagination/Footer simple state -->
+<div class="mt-6 pt-4 border-t border-outline-variant/10 flex justify-between items-center text-sm text-on-surface-variant">
+<span>Showing 5 of 124 entries</span>
+<div class="flex gap-2">
+<button onclick="prevPage()" class="px-3 py-1 rounded hover:bg-surface-container-highest">Prev</button>
+<button onclick="nextPage()" class="px-3 py-1 rounded hover:bg-surface-container-highest">Next</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+
+    <script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/transactions.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (!localStorage.getItem("access_token")) {
+        window.location.href = "/pages/auth.html";
+    }
+    initLayout()
+    loadStocks();
+    loadTransactions();
+});
+</script>
+
+</main>
+</div>
+</body></html>

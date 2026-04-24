@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Monolith - Access</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- shared config -->
+<script src="../assets/shared/tailwind.js"></script>
+
+<!-- global css -->
+<link rel="stylesheet" href="../assets/css/global.css">
+
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-surface">
+<!-- Ambient Background Lighting -->
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px] pointer-events-none"></div>
+<main class="w-full max-w-md relative z-10">
+<!-- Logo Header -->
+<div class="text-center mb-10">
+<h1 class="font-headline font-extrabold text-3xl text-on-surface tracking-tighter mb-2">Monolith</h1>
+<p class="font-label text-on-surface-variant text-sm tracking-wide">Secure Portfolio Access</p>
+</div>
+<!-- Auth Card -->
+<div class="glass-panel rounded-xl p-8 ambient-shadow ghost-border">
+<!-- Tabs -->
+<div class="flex gap-2 p-1 bg-surface-container-highest rounded-lg mb-8">
+<button class="flex-1 py-2 px-4 rounded-md bg-surface-container-lowest text-primary font-label font-semibold text-sm shadow-sm transition-all text-center">Login</button>
+<button onclick="goToSignup()"
+class="flex-1 py-2 px-4 rounded-md text-on-surface-variant hover:text-on-surface font-label font-medium text-sm transition-all text-center">
+Create Account
+</button>
+</div>
+<!-- Login Form -->
+<form action="#" class="flex flex-col gap-6">
+<!-- Input Group -->
+<div class="space-y-4">
+<div class="relative">
+<label class="sr-only" for="username">Username</label>
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">person</span>
+</div>
+<input class="w-full bg-surface-container-highest border-0 ghost-border rounded-md pl-11 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary focus:border-primary transition-colors font-body text-sm" id="username" name="username" placeholder="Username" required="" type="text"/>
+</div>
+<div class="relative">
+<label class="sr-only" for="password">Password</label>
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">lock</span>
+</div>
+<input class="w-full bg-surface-container-highest border-0 ghost-border rounded-md pl-11 pr-4 py-3 text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary focus:border-primary transition-colors font-body text-sm" id="password" name="password" placeholder="Password" required="" type="password"/>
+</div>
+</div>
+<!-- Utilities -->
+<div class="flex items-center justify-between mt-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded bg-surface-container-highest border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-bright w-4 h-4" type="checkbox"/>
+<span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Remember me</span>
+</label>
+<a href="/pages/reset_password.html"
+   class="font-label text-sm text-primary hover:text-primary-fixed-dim transition-colors">
+   Forgot Password?
+</a>
+</div>
+<!-- CTA -->
+<button class="w-full gradient-btn text-on-secondary rounded-lg py-3 font-headline font-bold text-sm tracking-wide mt-4 hover:opacity-90 transition-opacity flex justify-center items-center gap-2" type="submit">
+                    Access Terminal
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+</div>
+<!-- Footer -->
+<div class="mt-8 text-center">
+<p class="font-label text-xs text-on-surface-variant/60">
+                Encrypted via AES-256. <a class="text-primary hover:underline" href="#">Privacy Policy</a>
+</p>
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", initLogin);
+</script>
+</main>
+</body></html>

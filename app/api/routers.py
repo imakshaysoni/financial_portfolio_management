@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from app.services.endpoints import PortfolioEndpoints
 from app.schemas.schemas import StockOut, TransactionOut, TransactionCreate, \
-    PortfolioSummaryOut, PortfolioHoldingOut, PositionOut
+    PortfolioSummaryOut, PortfolioHoldingOut, PositionOut, PriceOut
 
 router = APIRouter()
 
@@ -38,4 +38,12 @@ router.add_api_route(
     PortfolioEndpoints.get_portfolio_summary,
     methods=["GET"],
     response_model=list[PortfolioHoldingOut] #PortfolioSummaryOut
+)
+
+
+router.add_api_route(
+    "/price",
+    PortfolioEndpoints.get_latest_price,
+    methods=["GET"],
+    response_model=PriceOut #PortfolioSummaryOut
 )

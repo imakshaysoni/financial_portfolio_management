@@ -63,3 +63,9 @@ class PortfolioEndpoints:
         holding = service.get_portfolio_summary(user.id)
         return holding
 
+    @staticmethod
+    def get_latest_price(symbol: str, user = Depends(AuthService.get_current_user)):
+        service = portfolio_db_service()
+        result = service.get_price(symbol)
+        logger.info(result.price)
+        return result

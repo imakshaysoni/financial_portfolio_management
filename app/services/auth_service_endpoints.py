@@ -23,7 +23,7 @@ class AuthServiceEndpoint:
     @staticmethod
     def reset_password(request: ResetPasswordDetails):
         auth_service = AuthService()
-        response = auth_service.reset_password(user_name=request.user_name)
+        response = auth_service.reset_password(email_address=request.email_address)
         return response
 
     @staticmethod

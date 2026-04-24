@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Equinox Ledger - Holdings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<!-- shared config -->
+<script src="../assets/shared/tailwind.js"></script>
+
+<!-- global css -->
+<link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<div class="flex h-[calc(100vh-72px)] overflow-hidden">
+<!-- SideNavBar -->
+<!-- Sidebar -->
+  <div id="sidebar"></div>
+    <div class="flex-1 flex flex-col lg:ml-72">
+
+<!-- Header -->
+    <div id="header"></div>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-8 lg:p-10 relative">
+<!-- Background Decorative Element -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline text-3xl font-bold text-on-surface tracking-tight mb-2">Holdings</h1>
+<p class="font-body text-on-surface-variant text-sm max-w-xl">Detailed overview of all active holdings, real-time market valuations, and absolute performance metrics.</p>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-high p-1.5 rounded-lg border border-outline-variant/30">
+<button class="px-4 py-1.5 rounded-md bg-surface-bright text-on-surface font-label text-sm font-medium shadow-sm transition-colors">All Assets</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-bright/50 font-label text-sm font-medium transition-colors">Equities</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface hover:bg-surface-bright/50 font-label text-sm font-medium transition-colors">Fixed Income</button>
+</div>
+</header>
+<!-- Table Container -->
+<div class="bg-surface-container-low rounded-xl shadow-[0_20px_40px_-15px_rgba(6,14,32,0.5)] border border-outline-variant/10 overflow-hidden flex flex-col">
+<!-- Table Controls -->
+<div class="p-5 border-b border-surface-container-highest/50 flex flex-wrap items-center justify-between gap-4 bg-surface-container/50">
+<div class="relative w-full sm:w-auto min-w-[280px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-sm">search</span>
+<input oninput="handleSearch(this.value)" class="w-full bg-surface-container-highest border border-outline-variant/30 focus:border-primary/50 text-on-surface text-sm rounded-md pl-9 pr-4 py-2 outline-none transition-all placeholder:text-outline-variant focus:ring-1 focus:ring-primary/50 font-body" placeholder="Search by asset name or symbol..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+
+    <div class="flex items-center gap-2 bg-surface-container-highest p-1 rounded-lg border border-outline-variant/20">
+
+    <button onclick="setFilter('all')"
+        class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium">
+        All
+    </button>
+
+    <button onclick="setFilter('profit')"
+        class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium">
+        Profit
+    </button>
+
+    <button onclick="setFilter('loss')"
+        class="filter-btn px-3 py-1.5 rounded-md text-sm font-medium">
+        Loss
+    </button>
+
+</div>
+
+<button onclick="exportCSV()" class="flex items-center gap-2 px-3 py-2 rounded-md bg-surface-container-highest border border-outline-variant/30 text-on-surface-variant hover:text-on-surface hover:border-outline-variant/60 transition-all font-label text-sm">
+<span class="material-symbols-outlined text-sm">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<!-- Table Data -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container/30 text-on-surface-variant font-label text-xs uppercase tracking-wider transition-all duration-300">
+<th class="px-6 py-4 font-medium sticky left-0 bg-surface-container-low/95 backdrop-blur z-10 w-64">Asset</th>
+<th class="px-6 py-4 font-medium text-right">Quantity</th>
+<th class="px-6 py-4 font-medium text-right">Avg Price</th>
+<th class="px-6 py-4 font-medium text-right">Current Price</th>
+<th class="px-6 py-4 font-medium text-right">Market Value</th>
+<th class="px-6 py-4 font-medium text-right">Total P&amp;L</th>
+<th class="px-6 py-4 font-medium text-right w-32">Allocation</th>
+</tr>
+</thead>
+<tbody id="positions_table_body"
+class="font-body text-sm divide-y divide-surface-container-highest/30">
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="p-4 border-t border-surface-container-highest/50 flex items-center justify-between bg-surface-container/30">
+<span class="text-xs text-on-surface-variant font-label">Showing 1 to 4 of 24 positions</span>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-bright hover:text-on-surface transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+
+<!-- 🔥 DYNAMIC PAGE NUMBERS -->
+    <div id="paginationNumbers" class="flex items-center gap-2"></div>
+
+<button class="w-8 h-8 flex items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-bright hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Footer Padding -->
+<div class="h-12"></div>
+</main>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/positions.js"></script>
+<script src="../assets/js/layout.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!localStorage.getItem("access_token")) {
+        window.location.href = "/pages/auth.html";
+    }
+    initLayout()
+    await loadPositions();   // first load
+    startAutoRefresh();
+    // set default active
+    const first = document.querySelector(".filter-btn");
+    if (first) {
+        first.classList.add("bg-surface-bright", "text-on-surface");
+    }
+})
+
+    document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        stopAutoRefresh();
+    } else {
+        startAutoRefresh();
+    }
+});
+</script>
+</div>
+</body></html>
